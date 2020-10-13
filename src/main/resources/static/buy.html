@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Buy History</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <script>
+
+    async function deleteById(id) {
+        
+        await fetch("api/compactdiscs/" + id, {
+            method: "DELETE"
+        });
+        await getAll();
+        //alert("deleted number " + id);
+    }
+	
+    function getId() {
+    	fetch('stocks/id/5f81609b433a7533e984d5b2').then(function(data) {
+             data.json().then(stocks=>{
+            	return JSON.stringify(stocks);
+            })
+        });
+    }
+    
+    function getStatus() {
+        // done using promise using then function syntax
+         fetch('stocks/id/5f81609b433a7533e984d5b2').then(function(result) {
+             return result.json();
+         }).then(function (cd) {
+             let htmlString = "<table class='table table-striped'><thead><tr><th>Ticker</th><th>Quantity</th></tr></thead>";
+           //  var it=document.getElementByClassName("table table-striped");
+           //  it.style.display=(it.style.display=="table")?"none":"table";
+                 htmlString+="<tr>";
+                 htmlString+="<td>"+ cd.ticker + "</td>";
+                 htmlString+="<td>"+ cd.quantity + "</td>";
+                 //ftmlString+="<td>"+ cd.price + "</td>";
+                // ftmlString+="<td>"+ cd.state + "</td>";
+                // htmlString+="<td>"+ cd.title + "</td>";
+                // htmlString+="<td><button class='btn btn-primary' onClick='deleteById(\"" + cd.hexString + "\")'>Sell</button></td>";
+                 htmlString+="<td><button class='btn btn-primary' onClick='getAll()'>Back</button></td>";
+
+                 htmlString+="</tr>";
+             );
+             htmlString += "</table>";
+             document.getElementById("cdDiv").innerHTML = htmlString;
+         });
+     }
+    
+    
+    function getAll() {
+       // done using promise using then function syntax
+        fetch('stocks/buy').then(function(result) {
+            return result.json();
+        }).then(function (cdList) {
+            let htmlString = "<table class='table table-striped'><thead><tr><th>Ticker</th><th>Quantity</th></tr></thead>";
+            cdList.map((cd) => {
+                htmlString+="<tr>";
+                htmlString+="<td>"+ cd.ticker + "</td>";
+                htmlString+="<td>"+ cd.quantity + "</td>";
+                htmlString+="<td><button class='btn btn-primary' onClick='deleteById(\"" + cd.hexString + "\")'>Sell</button></td>";
+                htmlString+="<td><button class='btn btn-primary' onClick='getStatus(\"" + cd.hexString + "\")'>View Status</button></td>";
+
+                htmlString+="</tr>";
+            });
+            htmlString += "</table>";
+            document.getElementById("cdDiv").innerHTML = htmlString;
+        });
+    }
+    </script>
+</head>
+<body onLoad="getId()">
+    <div class="container">
+        <h1>Buy History</h1>
+        <p>The list of stocks you have bought</p>
+        <div id="cdDiv"></div>
+        <p>To add another fantastic album, click <a href="stocks/id/5f81609b433a7533e984d5b2">here</a>.</p>
+    </div>
+</body>
+</html>

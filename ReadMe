@@ -1,0 +1,6 @@
+Clone this project to your sts and create your new branch.
+Test with mongodb.
+Changes in tradesim project:
+Change ObjectId type in Trade class
+Change database name to Trade.
+Run both projects and check for change in status.  
